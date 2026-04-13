@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎊 Revelación de Género</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #f4a7c0;
+    --azul: #9ac4e8;
+    --lavanda: #c9b8e8;
+    --crema: #fdf6ef;
+    --durazno: #fce0cc;
+    --verde-menta: #b8e8d4;
+    --dorado: #e8c97a;
+    --texto: #5a4a5a;
+    --texto-suave: #9a8a9a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: linear-gradient(135deg, #fdf0f8 0%, #f0f4fd 50%, #f0fdf8 100%);
+    font-family: 'Nunito', sans-serif;
+    color: var(--texto);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Burbujas de fondo */
+  .bubbles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.18;
+    animation: floatBubble linear infinite;
+  }
+  @keyframes floatBubble {
+    0% { transform: translateY(110vh) scale(0.8); opacity: 0; }
+    10% { opacity: 0.18; }
+    90% { opacity: 0.18; }
+    100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeDown 0.9s ease both;
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .crown {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 8px;
+    animation: bounce 2s ease infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .title-card {
+    background: white;
+    border-radius: 30px;
+    padding: 30px 40px;
+    box-shadow: 0 8px 40px rgba(200, 150, 200, 0.18);
+    border: 2.5px solid rgba(244,167,192,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .title-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(244,167,192,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .title-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(154,196,232,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .subtitle-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--rosa), var(--azul));
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    background: linear-gradient(135deg, #d4698a, #7a9fd4, #9a7ac4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .header-meta {
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .header-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--crema);
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    text-align: center;
+    margin: 10px 0 30px;
+    font-size: 1.4rem;
+    letter-spacing: 8px;
+    opacity: 0.5;
+    animation: fadeIn 1.2s ease both 0.3s;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 0.5; }
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50px;
+    top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--rosa), var(--azul), var(--lavanda), var(--verde-menta), var(--dorado));
+    border-radius: 3px;
+    opacity: 0.4;
+  }
+
+  .event {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 22px;
+    animation: slideIn 0.6s ease both;
+  }
+  .event:nth-child(1) { animation-delay: 0.1s; }
+  .event:nth-child(2) { animation-delay: 0.2s; }
+  .event:nth-child(3) { animation-delay: 0.3s; }
+  .event:nth-child(4) { animation-delay: 0.4s; }
+  .event:nth-child(5) { animation-delay: 0.5s; }
+  .event:nth-child(6) { animation-delay: 0.6s; }
+  .event:nth-child(7) { animation-delay: 0.7s; }
+  .event:nth-child(8) { animation-delay: 0.8s; }
+  .event:nth-child(9) { animation-delay: 0.9s; }
+  .event:nth-child(10){ animation-delay: 1.0s; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .time-col {
+    min-width: 100px;
+    text-align: right;
+    padding-top: 16px;
+  }
+  .time-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--texto-suave);
+    letter-spacing: 0.5px;
+  }
+
+  .dot-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 20px;
+  }
+  .dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    margin-top: 14px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card {
+    flex: 1;
+    background: white;
+    border-radius: 20px;
+    padding: 18px 22px;
+    box-shadow: 0 4px 20px rgba(180,140,200,0.1);
+    border-left: 4px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(180,140,200,0.2);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .card-emoji {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--texto);
+  }
+  .card-desc {
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    line-height: 1.6;
+    padding-left: 36px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .badge-juego { background: #fce0cc; color: #c4661a; }
+  .badge-especial { background: #f4d4e8; color: #a43070; }
+  .badge-comida { background: #d4f0e0; color: #1a7048; }
+  .badge-programa { background: #dce8f8; color: #1a4080; }
+
+  /* Colores de cards */
+  .c-rosa    { border-left-color: var(--rosa); }
+  .c-azul    { border-left-color: var(--azul); }
+  .c-lavanda { border-left-color: var(--lavanda); }
+  .c-menta   { border-left-color: var(--verde-menta); }
+  .c-durazno { border-left-color: var(--durazno); }
+  .c-dorado  { border-left-color: var(--dorado); }
+  .d-rosa    { background: var(--rosa); }
+  .d-azul    { background: var(--azul); }
+  .d-lavanda { background: var(--lavanda); }
+  .d-menta   { background: var(--verde-menta); }
+  .d-durazno { background: #f8c0a0; }
+  .d-dorado  { background: var(--dorado); }
+
+  /* JUEGOS SECTION */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 40px 0 20px;
+    color: var(--texto);
+    position: relative;
+    animation: fadeIn 0.8s ease both 0.5s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  .section-title span {
+    background: white;
+    padding: 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .section-title::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--rosa), var(--azul));
+    opacity: 0.3;
+  }
+
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .game-card {
+    background: white;
+    border-radius: 22px;
+    padding: 22px 18px;
+    box-shadow: 0 4px 20px rgba(180,140,200,0.1);
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: popIn 0.5s ease both;
+    cursor: default;
+  }
+  .game-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(180,140,200,0.22);
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .game-card:nth-child(1) { animation-delay: 0.1s; }
+  .game-card:nth-child(2) { animation-delay: 0.2s; }
+  .game-card:nth-child(3) { animation-delay: 0.3s; }
+  .game-card:nth-child(4) { animation-delay: 0.4s; }
+  .game-card:nth-child(5) { animation-delay: 0.5s; }
+  .game-card:nth-child(6) { animation-delay: 0.6s; }
+
+  .game-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .game-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--texto);
+  }
+  .game-desc {
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+    line-height: 1.5;
+  }
+  .game-pill {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 12px;
+    background: var(--crema);
+    color: var(--texto-suave);
+  }
+
+  /* TIPS */
+  .tips-box {
+    background: white;
+    border-radius: 24px;
+    padding: 28px 30px;
+    box-shadow: 0 4px 20px rgba(180,140,200,0.1);
+    border: 2px dashed rgba(244,167,192,0.4);
+    margin-bottom: 30px;
+    animation: fadeIn 0.8s ease both 1s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  .tips-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tips-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 500px) { .tips-list { grid-template-columns: 1fr; } }
+  .tips-list li {
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .tips-list li::before {
+    content: '✦';
+    color: var(--rosa);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+    animation: fadeIn 1s ease both 1.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  .footer-heart {
+    font-size: 1.8rem;
+    display: block;
+    margin-bottom: 6px;
+    animation: heartbeat 1.5s ease infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.3); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.2); }
+    56% { transform: scale(1); }
+  }
+
+  @media (max-width: 540px) {
+    .timeline::before { left: 30px; }
+    .time-col { min-width: 70px; }
+    .time-label { font-size: 0.7rem; }
+    .card { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Burbujas decorativas -->
+<div class="bubbles" id="bubbles"></div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <span class="crown">🌈</span>
+    <div class="title-card">
+      <div class="subtitle-tag">¡Gran Revelación!</div>
+      <h1>¿Niño o Niña?<br><em>¡Hoy lo sabemos!</em></h1>
+      <div class="header-meta">
+        <span>📍 Lima, Perú</span>
+        <span>🎊 30–50 invitados</span>
+        <span>⏱ ~5 horas de fiesta</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">🌸 · 🍭 · 🌸 · 🍭 · 🌸</div>
+
+  <!-- CRONOGRAMA -->
+  <div class="section-title"><span>✨ Cronograma del Evento</span></div>
+
+  <div class="timeline">
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">3:00 pm</span></div>
+      <div class="dot-col"><div class="dot d-rosa"></div></div>
+      <div class="card c-rosa">
+        <div class="card-top">
+          <span class="card-emoji">🚪</span>
+          <span class="card-title">Bienvenida y Llegada</span>
+          <span class="badge badge-programa">Programa</span>
+        </div>
+        <p class="card-desc">Los invitados llegan, se registran y reciben su <strong>tarjeta de votación</strong> (¿niño o niña?). Música suave de fondo, decoración rosada y celeste, mesa de bienvenida con snacks peruanos.</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">3:20 pm</span></div>
+      <div class="dot-col"><div class="dot d-azul"></div></div>
+      <div class="card c-azul">
+        <div class="card-top">
+          <span class="card-emoji">🍹</span>
+          <span class="card-title">Cóctel de Bienvenida</span>
+          <span class="badge badge-comida">Comida</span>
+        </div>
+        <p class="card-desc">Recepción con <strong>chicha morada, limonada rosada y anticuchos</strong>. Momento para que todos conversen y hagan sus apuestas del género del bebé. Mesa de votación abierta.</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">3:45 pm</span></div>
+      <div class="dot-col"><div class="dot d-lavanda"></div></div>
+      <div class="card c-lavanda">
+        <div class="card-top">
+          <span class="card-emoji">🎲</span>
+          <span class="card-title">¡Primer Juego! — "¿Niño o Niña?"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">Todos se dividen en 2 equipos: <strong>Team Niño 💙</strong> vs <strong>Team Niña 💗</strong>. Cada equipo responde preguntas sobre la mamá y el bebé. El equipo con más puntos gana un premio peruano.</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">4:10 pm</span></div>
+      <div class="dot-col"><div class="dot d-menta"></div></div>
+      <div class="card c-menta">
+        <div class="card-top">
+          <span class="card-emoji">🎯</span>
+          <span class="card-title">Juego — "Globo Sorpresa"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">Cada invitado revienta un globo que tiene adentro un papel con una pregunta divertida sobre el bebé: nombre, personalidad, a quién se parecerá. El más gracioso gana. ¡Muchas risas garantizadas! 🎈</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">4:30 pm</span></div>
+      <div class="dot-col"><div class="dot d-durazno"></div></div>
+      <div class="card c-durazno">
+        <div class="card-top">
+          <span class="card-emoji">🍽️</span>
+          <span class="card-title">Almuerzo / Buffet</span>
+          <span class="badge badge-comida">Comida</span>
+        </div>
+        <p class="card-desc">Buffet con comida peruana: <strong>arroz con leche, mazamorra morada, causa limeña, pollo a la brasa</strong> y más. Mesa de postres temática con colores del evento. ¡El momento perfecto para la selfi!</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">5:30 pm</span></div>
+      <div class="dot-col"><div class="dot d-rosa"></div></div>
+      <div class="card c-rosa">
+        <div class="card-top">
+          <span class="card-emoji">🎵</span>
+          <span class="card-title">Karaoke Bebé — "Adivina la canción"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">Se reproducen canciones de cuna y canciones conocidas con <strong>letra modificada</strong> relacionada al bebé. Los invitados deben adivinar la canción original. ¡El más rápido en gritar gana un punto!</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">5:55 pm</span></div>
+      <div class="dot-col"><div class="dot d-azul"></div></div>
+      <div class="card c-azul">
+        <div class="card-top">
+          <span class="card-emoji">🧶</span>
+          <span class="card-title">Juego — "Adivina la barriguita"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">Cada invitado corta un trozo de lana del tamaño que cree que mide la barriga de mamá. Al final se comparan con la medida real. ¡El más cercano gana un detallito especial! 🏆</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">6:05 pm</span></div>
+      <div class="dot-col"><div class="dot d-durazno"></div></div>
+      <div class="card c-durazno">
+        <div class="card-top">
+          <span class="card-emoji">🍼</span>
+          <span class="card-title">Juego — "Artículos de Bebé A-Z"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">Cada invitado tiene una hoja con el abecedario completo. El reto: escribir un <strong>artículo o cosa de bebé para cada letra</strong> (A=Andador, B=Babero, C=Cuna…). Tiene 3 minutos. El que complete más letras correctas gana. ¡Sencillo pero pone a pensar a todos! 🧠✏️</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">6:15 pm</span></div>
+      <div class="dot-col"><div class="dot d-rosa"></div></div>
+      <div class="card c-rosa">
+        <div class="card-top">
+          <span class="card-emoji">🍎</span>
+          <span class="card-title">Juego — "Frutifruti de Nombres"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">¡El clásico frutifruti versión bebé! Se sortea una letra y hay que completar: <strong>nombre de niño · nombre de niña · fruta · animal · ciudad</strong>. El primero en gritar "¡Frutifruti!" puntúa. Se juegan 5 rondas rápidas. Ideal en mesas o grupos pequeños. 🏆</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">6:25 pm</span></div>
+      <div class="dot-col"><div class="dot d-menta"></div></div>
+      <div class="card c-menta">
+        <div class="card-top">
+          <span class="card-emoji">🎈</span>
+          <span class="card-title">Juego — "Cuida tu Globo"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">Cada invitado amarra un globo <strong>rosado o celeste</strong> en el tobillo. Al ritmo de la música, todos intentan reventar el globo ajeno sin que les revienten el suyo. ¡Último con globo entero gana! Caos, risas y mucha emoción garantizada. 💥</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">6:40 pm</span></div>
+      <div class="dot-col"><div class="dot d-lavanda"></div></div>
+      <div class="card c-lavanda">
+        <div class="card-top">
+          <span class="card-emoji">🐱</span>
+          <span class="card-title">Juego — "Michi Jugante"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">¡El triqui/gato humano y temático! Se forma un tablero gigante en el piso con <strong>2 líneas verticales y 2 horizontales</strong> (cinta o cuerda), creando 9 casillas. Se forman 2 equipos: 💙 <strong>plato celeste = X (niño)</strong> vs 💗 <strong>plato rosado = O (niña)</strong>. Por turnos, un integrante de cada equipo se para en una casilla. ¡El equipo que alinee 3 en fila gana la ronda! Se juegan varias rondas. 🏆</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">6:55 pm</span></div>
+      <div class="dot-col"><div class="dot d-azul"></div></div>
+      <div class="card c-azul">
+        <div class="card-top">
+          <span class="card-emoji">🤸</span>
+          <span class="card-title">Juego Final — "¿Varón o Mujer?"</span>
+          <span class="badge badge-juego">Juego</span>
+        </div>
+        <p class="card-desc">El animador hace preguntas del bebé. <strong>Crees que es varón → salta</strong>. <strong>Crees que es mujer → agáchate</strong>. El que se equivoque o llegue tarde queda fuera. ¡Perfecto para calentar el ánimo justo antes de la gran revelación! ⚡</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">7:15 pm</span></div>
+      <div class="dot-col"><div class="dot d-dorado"></div></div>
+      <div class="card c-dorado" style="border-left-color:#e8c97a">
+        <div class="card-top">
+          <span class="card-emoji">🎂</span>
+          <span class="card-title">Torta Sorpresa & Brindis</span>
+          <span class="badge badge-especial">¡Especial!</span>
+        </div>
+        <p class="card-desc">Se trae la torta decorada en rosa y celeste. Papá y mamá la cortan juntos revelando el <strong>relleno de color</strong> (rosado o celeste). ¡El gran momento! Brindis con espumante y gaseosa para todos. 🥂</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">7:30 pm</span></div>
+      <div class="dot-col"><div class="dot d-lavanda"></div></div>
+      <div class="card c-lavanda">
+        <div class="card-top">
+          <span class="card-emoji">🎊</span>
+          <span class="card-title">¡LA GRAN REVELACIÓN!</span>
+          <span class="badge badge-especial">★ Momento Estelar</span>
+        </div>
+        <p class="card-desc">Los papás sueltan <strong>globos de colores</strong> al cielo o lanzan polvo de colores (confetti). ¡El color revelará si es niño o niña! Todos gritan, abrazan y celebran. Sesión de fotos grupal. 📸🎉</p>
+      </div>
+    </div>
+
+    <div class="event">
+      <div class="time-col"><span class="time-label">7:50 pm</span></div>
+      <div class="dot-col"><div class="dot d-rosa"></div></div>
+      <div class="card c-rosa">
+        <div class="card-top">
+          <span class="card-emoji">🎁</span>
+          <span class="card-title">Cierre & Recordatorios</span>
+          <span class="badge badge-programa">Programa</span>
+        </div>
+        <p class="card-desc">Entrega de <strong>souvenirs personalizados</strong> para los invitados (jaboncitos, velas o dulces). Palabras de los papás agradeciendo a todos. Música y baile libre para terminar la noche. 💃🕺</p>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <!-- JUEGOS ADICIONALES -->
+  <div class="section-title"><span>🎮 Dinámica de Juegos</span></div>
+
+  <div class="games-grid">
+    <div class="game-card">
+      <span class="game-icon">🗳️</span>
+      <div class="game-name">Votación de Género</div>
+      <p class="game-desc">Al llegar, cada uno vota si cree que es niño o niña. Al final se revela quién acertó.</p>
+      <span class="game-pill">Toda la velada</span>
+    </div>
+    <div class="game-card">
+      <span class="game-icon">🏋️</span>
+      <div class="game-name">¿Cuánto pesa el bebé?</div>
+      <p class="game-desc">Cada invitado escribe su estimado del peso del bebé al nacer. El más cercano gana.</p>
+      <span class="game-pill">Papel y lapicero</span>
+    </div>
+    <div class="game-card">
+      <span class="game-icon">🖍️</span>
+      <div class="game-name">Decora la Ropita</div>
+      <p class="game-desc">Con plumones textiles, cada invitado decora un babero o mameluco para el bebé.</p>
+      <span class="game-pill">Super tierno</span>
+    </div>
+    <div class="game-card">
+      <span class="game-icon">📜</span>
+      <div class="game-name">Carta al Bebé</div>
+      <p class="game-desc">Cada invitado escribe un mensaje o deseo para el bebé. Se guardan en un cajita especial.</p>
+      <span class="game-pill">Emotivo</span>
+    </div>
+    <div class="game-card">
+      <span class="game-icon">🎠</span>
+      <div class="game-name">Ruleta de Consejos</div>
+      <p class="game-desc">Una ruleta con preguntas divertidas para los papás: "¿A quién se parecerá más?" etc.</p>
+      <span class="game-pill">¡Risas garantizadas!</span>
+    </div>
+    <div class="game-card">
+      <span class="game-icon">📸</span>
+      <div class="game-name">Photo Booth</div>
+      <p class="game-desc">Rincón de fotos con props rosados y celestes: coronitas, bigotes, letreros y más.</p>
+      <span class="game-pill">Recuerdo para todos</span>
+    </div>
+    <div class="game-card" style="border-top: 3px solid #fce0cc;">
+      <span class="game-icon">🍼</span>
+      <div class="game-name">Artículos de Bebé A-Z</div>
+      <p class="game-desc">Hoja con el abecedario completo. Para cada letra hay que escribir un artículo de bebé. <strong>A=Andador, B=Babero, C=Cuna…</strong> ¡3 minutos para completar el mayor número de letras!</p>
+      <span class="game-pill">✏️ Papel y lapicero</span>
+    </div>
+    <div class="game-card" style="border-top: 3px solid #f4a7c0;">
+      <span class="game-icon">🍎</span>
+      <div class="game-name">Frutifruti de Nombres</div>
+      <p class="game-desc">Versión bebé del clásico frutifruti: cada ronda tiene una letra y hay que completar <strong>nombre de niño, nombre de niña, nombre de animal, fruta y ciudad</strong>. ¡El primero en gritar "¡Frutifruti!" gana el punto! Se juega en mesas o en grupos.</p>
+      <span class="game-pill">🏆 Muy competitivo</span>
+    </div>
+    <div class="game-card" style="border-top: 3px solid #9ac4e8;">
+      <span class="game-icon">🎈</span>
+      <div class="game-name">Cuida tu Globo</div>
+      <p class="game-desc">Cada invitado amarra un globo rosado o celeste en el tobillo. Al ritmo de la música, todos intentan reventar el globo del otro sin que les revienten el suyo. ¡El último con globo sano gana! Caos y risas totales.</p>
+      <span class="game-pill">💥 Mucho movimiento</span>
+    </div>
+    <div class="game-card" style="border-top: 3px solid #c9b8e8;">
+      <span class="game-icon">🐱</span>
+      <div class="game-name">Michi Jugante</div>
+      <p class="game-desc">Tablero gigante en el piso con <strong>2 líneas verticales + 2 horizontales</strong> (9 casillas). Team 💙 celeste = X · Team 💗 rosado = O. Por turnos cada jugador se para en una casilla. ¡El que alinee 3 en fila gana la ronda!</p>
+      <span class="game-pill">⭕❌ Triqui humano</span>
+    </div>
+    <div class="game-card" style="border-top: 3px solid #b8e8d4;">
+      <span class="game-icon">🤸</span>
+      <div class="game-name">Salto: ¿Varón o Mujer?</div>
+      <p class="game-desc">El animador hace una pregunta sobre el bebé. Los que creen que es <strong>varón saltan</strong>, los que creen que es <strong>mujer se agachan</strong>. Se puede hacer al revés para confundir. El que se equivoque sale. ¡Perfecto para caldear el ambiente antes de la revelación!</p>
+      <span class="game-pill">⚡ Antes de revelar</span>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="section-title"><span>💡 Tips para el Evento</span></div>
+  <div class="tips-box">
+    <div class="tips-title">🌸 Recomendaciones para Lima, Perú</div>
+    <ul class="tips-list">
+      <li>Prepara la torta revelación con anticipación — coordina con la pastelería el color interno.</li>
+      <li>Ten una playlist con cumbia, salsa suave y canciones de moda para el momento del baile.</li>
+      <li>Los globos de helio son perfectos para soltar al revelar el género en un jardín o terraza.</li>
+      <li>El confetti de colores (polvo rosa/celeste) es muy fotogénico y económico en mercados limeños.</li>
+      <li>Prepara premios peruanos: chocolates Costa, alfajores o un canastito de golosinas.</li>
+      <li>Designa a alguien de confianza para filmar el momento de la revelación en video.</li>
+      <li>Ten una mesa de snacks dulces y salados durante todo el evento: picarones mini, tequeños.</li>
+      <li>Los souvenirs más populares: velas aromáticas, jaboncitos o bolsitas de maní garrapiñado.</li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="footer-heart">🌈</span>
+    <p>Con amor para la familia que crece ·  <em>¡Que sea lo que Dios quiera!</em></p>
+    <p style="margin-top:6px; font-size:0.72rem; opacity:0.6;">Lima, Perú · Revelación de Género</p>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+  // Crear burbujas flotantes
+  const container = document.getElementById('bubbles');
+  const colors = ['#f4a7c0','#9ac4e8','#c9b8e8','#b8e8d4','#fce0cc','#e8c97a'];
+  for (let i = 0; i < 18; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = Math.random() * 80 + 30;
+    b.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${Math.random()*15+10}s;
+      animation-delay:${Math.random()*10}s;
+    `;
+    container.appendChild(b);
+  }
+</script>
+</body>
+</html>

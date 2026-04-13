@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revelación de Género · Alex & Genesis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #f4a7c0;
+    --azul: #9ac4e8;
+    --lavanda: #c9b8e8;
+    --crema: #fdf6ef;
+    --texto: #5a4a5a;
+    --texto-suave: #9a8a9a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: linear-gradient(135deg, #fdf0f8 0%, #f0f4fd 50%, #f0fdf8 100%);
+    font-family: 'Nunito', sans-serif;
+    color: var(--texto);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    overflow-x: hidden;
+  }
+
+  /* ── PANTALLA DE ENTRADA ── */
+  .splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: linear-gradient(135deg, #fce8f3 0%, #e8f0fc 50%, #e8fcf4 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: opacity 0.7s ease, visibility 0.7s ease;
+  }
+  .splash.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .splash-note {
+    font-size: 4rem;
+    animation: notePulse 1.4s ease infinite;
+  }
+  @keyframes notePulse {
+    0%, 100% { transform: scale(1) rotate(-8deg); }
+    50%       { transform: scale(1.18) rotate(8deg); }
+  }
+  .splash-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    background: linear-gradient(135deg, #d4698a, #7a9fd4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    padding: 0 30px;
+  }
+  .splash-sub {
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .splash-btn {
+    margin-top: 10px;
+    background: linear-gradient(135deg, var(--rosa), var(--azul));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 36px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(200,150,200,0.35);
+    animation: splashBounce 1.8s ease infinite;
+  }
+  @keyframes splashBounce {
+    0%, 100% { transform: translateY(0); box-shadow: 0 6px 24px rgba(200,150,200,0.35); }
+    50%       { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(200,150,200,0.45); }
+  }
+  .splash-hearts {
+    font-size: 1.2rem;
+    letter-spacing: 8px;
+    opacity: 0.5;
+  }
+
+  /* ── GLOBOS CAYENDO ── */
+  .balloons-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .balloon {
+    position: absolute;
+    top: -120px;
+    animation: fallDown linear infinite;
+  }
+
+  .balloon svg {
+    display: block;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
+  }
+
+  @keyframes fallDown {
+    0%   { transform: translateY(0) rotate(0deg);   opacity: 0; }
+    5%   { opacity: 0.85; }
+    95%  { opacity: 0.85; }
+    100% { transform: translateY(110vh) rotate(15deg); opacity: 0; }
+  }
+
+  @keyframes sway {
+    0%, 100% { margin-left: 0; }
+    25%       { margin-left: 18px; }
+    75%       { margin-left: -18px; }
+  }
+
+  .balloon { animation-name: fallDown, sway; }
+
+  /* ── HERO FOTO ── */
+  .hero-wrap {
+    margin: -48px -40px 32px;
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 36%;
+    display: block;
+  }
+  .hero-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, white);
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: white;
+    border-radius: 36px;
+    padding: 48px 40px 44px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 16px 60px rgba(200, 150, 200, 0.2);
+    border: 2.5px solid rgba(244, 167, 192, 0.25);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(244,167,192,0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, rgba(154,196,232,0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* FILA ARCOIRIS + FOTO BB */
+  .crown-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: -30px;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .crown {
+    font-size: 2.2rem;
+    animation: bounce 2s ease infinite;
+    flex-shrink: 0;
+  }
+  .crown-flip {
+    transform: scaleX(-1);
+    display: inline-block;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-10px); }
+  }
+  .crown-flip {
+    animation: bounceFlip 2s ease infinite 0.3s;
+  }
+  @keyframes bounceFlip {
+    0%, 100% { transform: scaleX(-1) translateY(0); }
+    50%       { transform: scaleX(-1) translateY(-10px); }
+  }
+
+  /* FOTO BB */
+  .bb-photo-wrap {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(135deg, var(--rosa), var(--azul), var(--lavanda));
+    box-shadow: 0 6px 24px rgba(200, 150, 200, 0.3);
+    margin: 0 auto 22px;
+    animation: fadeUp 1s ease both 0.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  .bb-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    display: block;
+  }
+
+  .tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--rosa), var(--azul));
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    background: linear-gradient(135deg, #d4698a, #7a9fd4, #9a7ac4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .parents {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--texto-suave);
+    margin-bottom: 28px;
+  }
+
+  .divider {
+    font-size: 1.2rem;
+    letter-spacing: 8px;
+    opacity: 0.4;
+    margin-bottom: 28px;
+  }
+
+  /* INFO */
+  .info-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--crema);
+    border-radius: 16px;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--texto);
+  }
+
+  .info-row .info-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  a.map-link {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    transition: opacity 0.2s;
+  }
+  a.map-link:hover { opacity: 0.75; }
+
+  .cta {
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    line-height: 1.6;
+    margin-bottom: 28px;
+    padding: 0 10px;
+  }
+
+  /* FOTO MAMÁ */
+  .mama-section {
+    margin: 0 0 28px;
+    animation: fadeUp 1s ease both 0.4s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+
+  .mama-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    margin-bottom: 12px;
+  }
+
+  .mama-photo-wrap {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(135deg, var(--lavanda), var(--rosa), var(--azul));
+    box-shadow: 0 8px 30px rgba(200, 150, 200, 0.28);
+    margin: 0 auto;
+  }
+
+  .mama-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    display: block;
+  }
+
+  .mama-name {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--texto-suave);
+    margin-top: 10px;
+  }
+
+  /* FRASES BÍBLICAS */
+  .biblia-block {
+    margin: 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .biblia-verse {
+    background: linear-gradient(135deg, rgba(244,167,192,0.1), rgba(154,196,232,0.1));
+    border-left: 3px solid var(--rosa);
+    border-radius: 0 16px 16px 0;
+    padding: 14px 18px;
+    text-align: left;
+  }
+  .biblia-verse:nth-child(2) {
+    border-left-color: var(--azul);
+    background: linear-gradient(135deg, rgba(154,196,232,0.1), rgba(201,184,232,0.1));
+  }
+  .biblia-verse:nth-child(3) {
+    border-left-color: var(--lavanda);
+    background: linear-gradient(135deg, rgba(201,184,232,0.1), rgba(244,167,192,0.1));
+  }
+
+  .biblia-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--texto);
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  .biblia-ref {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+  }
+
+  /* ── VOTACION ── */
+  .vote-section {
+    margin: 0 0 28px;
+    background: var(--crema);
+    border-radius: 24px;
+    padding: 22px 20px;
+  }
+  .vote-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--texto);
+  }
+  .vote-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .vote-btn {
+    flex: 1;
+    border: none;
+    border-radius: 18px;
+    padding: 14px 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .vote-btn:hover  { transform: translateY(-3px); }
+  .vote-btn:active { transform: scale(0.96); }
+  .vote-varon {
+    background: linear-gradient(135deg, #9ac4e8, #6aaad8);
+    color: white;
+    box-shadow: 0 4px 16px rgba(154,196,232,0.4);
+  }
+  .vote-mujer {
+    background: linear-gradient(135deg, #f4a7c0, #e87aa0);
+    color: white;
+    box-shadow: 0 4px 16px rgba(244,167,192,0.4);
+  }
+  .vote-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .vote-btn.voted {
+    outline: 3px solid white;
+    box-shadow: 0 0 0 5px rgba(0,0,0,0.12);
+  }
+
+  .vote-results { display: none; }
+  .vote-results.show { display: block; }
+
+  .vote-bar-wrap {
+    background: #e8e0e8;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 14px;
+    display: flex;
+    margin-bottom: 10px;
+  }
+  .bar-varon {
+    background: linear-gradient(90deg, #9ac4e8, #6aaad8);
+    height: 100%;
+    transition: width 0.6s ease;
+    border-radius: 12px 0 0 12px;
+  }
+  .bar-mujer {
+    background: linear-gradient(90deg, #f4a7c0, #e87aa0);
+    height: 100%;
+    transition: width 0.6s ease;
+    border-radius: 0 12px 12px 0;
+  }
+  .vote-counts {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--texto-suave);
+  }
+  .vote-msg {
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  .footer-hearts {
+    font-size: 1.4rem;
+    letter-spacing: 6px;
+    opacity: 0.5;
+    animation: heartbeat 1.5s ease infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14%       { transform: scale(1.25); }
+    28%       { transform: scale(1); }
+    42%       { transform: scale(1.15); }
+    56%       { transform: scale(1); }
+  }
+
+  /* ── BOTON MUSICA ── */
+  .music-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--rosa), var(--azul));
+    box-shadow: 0 4px 20px rgba(200, 150, 200, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeUp 1s ease both 1s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  .music-btn:hover {
+    transform: scale(1.12);
+    box-shadow: 0 6px 28px rgba(200, 150, 200, 0.55);
+  }
+  .music-btn.playing {
+    animation: fadeUp 1s ease both 1s, pulse-ring 1.8s ease infinite;
+  }
+  @keyframes pulse-ring {
+    0%   { box-shadow: 0 4px 20px rgba(244,167,192,0.4), 0 0 0 0 rgba(244,167,192,0.5); }
+    70%  { box-shadow: 0 4px 20px rgba(244,167,192,0.4), 0 0 0 14px rgba(244,167,192,0); }
+    100% { box-shadow: 0 4px 20px rgba(244,167,192,0.4), 0 0 0 0 rgba(244,167,192,0); }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- AUDIO -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="assets/Camilo%20-%20La%20Boda%20(Official%20Video).mp3" type="audio/mpeg">
+</audio>
+
+<!-- PANTALLA DE ENTRADA -->
+<div class="splash" id="splash">
+  <div class="splash-note">🎶</div>
+  <h2 class="splash-title">Alex & Genesis<br>te invitan</h2>
+  <p class="splash-sub">Toca para abrir la invitación</p>
+  <button class="splash-btn">Abrir invitación 🌈</button>
+  <div class="splash-hearts">💙 · 💗</div>
+</div>
+
+<!-- BOTON MUSICA -->
+<button class="music-btn" id="musicBtn" title="Reproducir música">🎵</button>
+
+<!-- GLOBOS DE FONDO -->
+<div class="balloons-layer" id="balloonsLayer"></div>
+
+<div class="card">
+
+  <div class="hero-wrap">
+    <img src="assets/img/bb1.jpeg" alt="Flores y zapatitos">
+  </div>
+
+  <div class="crown-row">
+    <span class="crown">🌈</span>
+    <div class="bb-photo-wrap">
+      <img src="assets/img/bb.jpg" alt="Foto del bebé" class="bb-photo">
+    </div>
+    <span class="crown crown-flip">🌈</span>
+  </div>
+
+  <div class="tag">¡Estás invitado!</div>
+
+  <h1>Revelación<br><em>de Género</em></h1>
+  <p class="parents">Alex & Genesis</p>
+
+  <div class="divider">🌸 · 🍭 · 🌸</div>
+
+  <div class="info-block">
+
+    <div class="info-row">
+      <span class="info-icon">📅</span>
+      <span>Domingo 31 de mayo, 2026</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-icon">⏰</span>
+      <span>3:00 pm</span>
+    </div>
+
+    <div class="info-row">
+      <a href="https://www.google.com/maps?q=-11.124840119189644,-77.59608098387449" target="_blank" rel="noopener" class="map-link">
+        <span class="info-icon">📍</span>
+        <span>Parque las Gardenias<br>Huacho 15136</span>
+      </a>
+    </div>
+
+  </div>
+
+  <p class="cta">
+    Ven a celebrar con nosotros el momento más especial —<br>
+    <strong>¿niño o niña?</strong> · ¡Pronto lo sabremos todos! 🎊
+  </p>
+
+  <div class="divider">· · ·</div>
+
+  <!-- FOTO MAMÁ -->
+  <div class="mama-section">
+    <p class="mama-label">La futura mamá ✨</p>
+    <div class="mama-photo-wrap">
+      <img src="assets/img/geni.jpeg" alt="Genesis" class="mama-photo">
+    </div>
+    <p class="mama-name">Genesis</p>
+  </div>
+
+  <div class="divider">✦ · ✦ · ✦</div>
+
+  <!-- VOTACION -->
+  <div class="vote-section">
+    <p class="vote-title">🗳️ ¿Tú qué crees que es?</p>
+    <div class="vote-buttons">
+      <button class="vote-btn vote-varon" id="btnVaron" onclick="votar('varon')">💙 Varón</button>
+      <button class="vote-btn vote-mujer" id="btnMujer" onclick="votar('mujer')">💗 Mujer</button>
+    </div>
+    <div class="vote-results" id="voteResults">
+      <div class="vote-bar-wrap">
+        <div class="bar-varon" id="barVaron" style="width:50%"></div>
+        <div class="bar-mujer" id="barMujer" style="width:50%"></div>
+      </div>
+      <div class="vote-counts">
+        <span>💙 Varón: <strong id="countVaron">0</strong></span>
+        <span>💗 Mujer: <strong id="countMujer">0</strong></span>
+      </div>
+      <p class="vote-msg" id="voteMsg"></p>
+    </div>
+  </div>
+
+  <!-- FRASES BÍBLICAS -->
+  <div class="biblia-block">
+    <div class="biblia-verse">
+      <p class="biblia-text">«Antes de formarte en el vientre materno, ya te conocía; antes de que nacieras, ya te había apartado.»</p>
+      <span class="biblia-ref">Jeremías 1:5</span>
+    </div>
+    <div class="biblia-verse">
+      <p class="biblia-text">«Los hijos son una herencia del Señor; los frutos del vientre son una recompensa.»</p>
+      <span class="biblia-ref">Salmos 127:3</span>
+    </div>
+    <div class="biblia-verse">
+      <p class="biblia-text">«Te alabo porque soy una creatura admirable. ¡Tus obras son maravillosas, y esto lo sé muy bien!»</p>
+      <span class="biblia-ref">Salmos 139:14</span>
+    </div>
+  </div>
+
+  <div class="footer-hearts">💙 · 💗</div>
+
+</div>
+
+<script>
+  // ── VOTACION ──
+  const API_URL = 'TU_URL_DE_RAILWAY'; // reemplaza esto tras deployar en Railway
+
+  const yaVoto = localStorage.getItem('bb_voto');
+
+  function renderVotes(data) {
+    const total = data.varon + data.mujer || 1;
+    document.getElementById('countVaron').textContent = data.varon;
+    document.getElementById('countMujer').textContent = data.mujer;
+    document.getElementById('barVaron').style.width = ((data.varon / total) * 100) + '%';
+    document.getElementById('barMujer').style.width = ((data.mujer / total) * 100) + '%';
+    document.getElementById('voteResults').classList.add('show');
+  }
+
+  function bloquearBotones(generoElegido) {
+    const btnV = document.getElementById('btnVaron');
+    const btnM = document.getElementById('btnMujer');
+    btnV.disabled = true;
+    btnM.disabled = true;
+    if (generoElegido === 'varon') btnV.classList.add('voted');
+    else btnM.classList.add('voted');
+    document.getElementById('voteMsg').textContent = '¡Gracias por votar! 🎉';
+  }
+
+  // Si ya voto antes, mostrar resultados sin poder votar de nuevo
+  if (yaVoto) {
+    fetch(API_URL + '/votes')
+      .then(r => r.json())
+      .then(data => { renderVotes(data); bloquearBotones(yaVoto); })
+      .catch(() => {});
+  }
+
+  function votar(gender) {
+    fetch(API_URL + '/vote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gender })
+    })
+    .then(r => r.json())
+    .then(data => {
+      localStorage.setItem('bb_voto', gender);
+      renderVotes(data);
+      bloquearBotones(gender);
+    })
+    .catch(() => {
+      document.getElementById('voteMsg').textContent = 'Error al conectar. Intenta de nuevo.';
+    });
+  }
+
+  // ── MUSICA + SPLASH ──
+  (function () {
+    const audio  = document.getElementById('bgMusic');
+    const btn    = document.getElementById('musicBtn');
+    const splash = document.getElementById('splash');
+
+    audio.volume = 0.55;
+
+    function setPlaying(on) {
+      btn.textContent = on ? '⏸' : '🎵';
+      btn.classList.toggle('playing', on);
+    }
+
+    // Al tocar la pantalla de entrada → oculta splash y arranca musica
+    splash.addEventListener('click', function () {
+      splash.classList.add('hide');
+      audio.play().then(function () {
+        setPlaying(true);
+      }).catch(function () {
+        setPlaying(false);
+      });
+    });
+
+    // Boton flotante para pausar / reanudar
+    btn.addEventListener('click', function () {
+      if (audio.paused) {
+        audio.play();
+        setPlaying(true);
+      } else {
+        audio.pause();
+        setPlaying(false);
+      }
+    });
+  })();
+
+  // ── GLOBOS ──
+  (function () {
+    const layer = document.getElementById('balloonsLayer');
+    const COLORS = ['#f4a7c0', '#9ac4e8', '#f9c0d4', '#b8d8f0', '#e8b4cc', '#a8cce8'];
+    const COUNT = 18;
+
+    function makeBalloon() {
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      const size  = 28 + Math.random() * 22;          // 28–50 px
+      const left  = Math.random() * 100;              // % across screen
+      const dur   = 6 + Math.random() * 8;            // 6–14 s fall
+      const swayDur = 2 + Math.random() * 2;          // 2–4 s sway
+      const delay = Math.random() * dur;              // stagger
+
+      const wrap = document.createElement('div');
+      wrap.className = 'balloon';
+      wrap.style.cssText = `
+        left: ${left}%;
+        animation-duration: ${dur}s, ${swayDur}s;
+        animation-delay: -${delay}s, -${Math.random() * swayDur}s;
+        animation-timing-function: linear, ease-in-out;
+        animation-iteration-count: infinite, infinite;
+        animation-direction: normal, alternate;
+      `;
+
+      // SVG globo: cuerpo ovalado + nudo + hilo
+      const w = size;
+      const h = size * 1.25;
+      const cx = w / 2;
+      const cy = h * 0.42;
+      const rx = w * 0.46;
+      const ry = h * 0.40;
+      const knotY = cy + ry;
+      const stringLen = h * 0.55;
+
+      wrap.innerHTML = `
+        <svg width="${w}" height="${h + stringLen}" viewBox="0 0 ${w} ${h + stringLen}" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- cuerpo -->
+          <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${color}" opacity="0.88"/>
+          <!-- brillo -->
+          <ellipse cx="${cx - rx*0.28}" cy="${cy - ry*0.32}" rx="${rx*0.22}" ry="${ry*0.16}" fill="white" opacity="0.45"/>
+          <!-- nudo -->
+          <circle cx="${cx}" cy="${knotY + 2}" r="2.5" fill="${color}" opacity="0.9"/>
+          <!-- hilo -->
+          <path d="M${cx} ${knotY + 4} Q${cx + 5} ${knotY + stringLen * 0.5} ${cx} ${knotY + stringLen}"
+                stroke="${color}" stroke-width="1.2" opacity="0.5" fill="none"/>
+        </svg>`;
+
+      layer.appendChild(wrap);
+    }
+
+    for (let i = 0; i < COUNT; i++) makeBalloon();
+  })();
+</script>
+
+</body>
+</html>
