@@ -200,7 +200,7 @@
     justify-content: center;
     gap: 14px;
     margin-top: -30px;
-    margin-bottom: 22px;
+    margin-bottom: 2px;
     position: relative;
     z-index: 2;
   }
@@ -704,11 +704,19 @@
     document.getElementById('voteMsg').textContent = '¡Gracias por votar! 🎉';
   }
 
-  // Si ya voto antes, mostrar resultados sin poder votar de nuevo
+  // Si ya voto antes, verificar si el servidor tiene datos
   if (yaVoto) {
     fetch(API_URL + '/votes')
       .then(r => r.json())
-      .then(data => { renderVotes(data); bloquearBotones(yaVoto); })
+      .then(data => {
+        if (data.varon + data.mujer === 0) {
+          // El servidor se reseteo (redeploy) — permitir votar de nuevo
+          localStorage.removeItem('bb_voto');
+        } else {
+          renderVotes(data);
+          bloquearBotones(yaVoto);
+        }
+      })
       .catch(() => {});
   }
 
