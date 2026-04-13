@@ -7,7 +7,9 @@ const app        = express();
 const PORT       = process.env.PORT || 3000;
 const VOTES_FILE = path.join(__dirname, 'votes.json');
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://revelacion-ayg.netlify.app', 'http://localhost']
+}));
 app.use(express.json());
 
 function getVotes() {
