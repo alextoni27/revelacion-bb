@@ -721,6 +721,11 @@
   }
 
   function votar(gender) {
+    const btnV = document.getElementById('btnVaron');
+    const btnM = document.getElementById('btnMujer');
+    btnV.disabled = true;
+    btnM.disabled = true;
+
     fetch(API_URL + '/vote', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -733,6 +738,8 @@
       bloquearBotones(gender);
     })
     .catch(() => {
+      btnV.disabled = false;
+      btnM.disabled = false;
       document.getElementById('voteMsg').textContent = 'Error al conectar. Intenta de nuevo.';
     });
   }
