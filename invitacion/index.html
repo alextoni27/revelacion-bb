@@ -84,19 +84,6 @@
     display: inline-block;
     margin-bottom: 12px;
   }
-  .bear-q {
-    position: absolute;
-    font-size: 1.5rem;
-    font-weight: 900;
-    top: 4px;
-    line-height: 1;
-  }
-  .bear-q.left  { left: -4px;  color: #f4a7c0; animation: qPop 2s ease infinite 0s; }
-  .bear-q.right { right: -4px; color: #9ac4e8; animation: qPop 2s ease infinite 0.4s; }
-  @keyframes qPop {
-    0%, 100% { transform: scale(1) rotate(-12deg); }
-    50%       { transform: scale(1.25) rotate(12deg); }
-  }
   .splash-title {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.35rem, 5vw, 1.75rem);
@@ -706,44 +693,7 @@
     <div class="splash-ribbon">Revelación de Género</div>
 
     <div class="bear-wrap">
-      <span class="bear-q left">?</span>
-      <svg viewBox="0 0 140 132" width="148" height="140" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="bhg" cx="38%" cy="32%">
-            <stop offset="0%" stop-color="#fdebd0"/>
-            <stop offset="100%" stop-color="#f0c090"/>
-          </radialGradient>
-        </defs>
-        <!-- orejas -->
-        <circle cx="27" cy="34" r="22" fill="#f0c090"/>
-        <circle cx="27" cy="34" r="14" fill="#f9b4c8" opacity="0.85"/>
-        <circle cx="113" cy="34" r="22" fill="#f0c090"/>
-        <circle cx="113" cy="34" r="14" fill="#9ac4e8" opacity="0.85"/>
-        <!-- cabeza -->
-        <circle cx="70" cy="76" r="54" fill="url(#bhg)"/>
-        <!-- ojos -->
-        <circle cx="51" cy="65" r="9" fill="#1c0e06"/>
-        <circle cx="89" cy="65" r="9" fill="#1c0e06"/>
-        <circle cx="54" cy="62" r="3.2" fill="white"/>
-        <circle cx="92" cy="62" r="3.2" fill="white"/>
-        <circle cx="53" cy="61" r="1.4" fill="white" opacity="0.7"/>
-        <circle cx="91" cy="61" r="1.4" fill="white" opacity="0.7"/>
-        <!-- hocico -->
-        <ellipse cx="70" cy="92" rx="22" ry="17" fill="#f8d4b0" opacity="0.9"/>
-        <!-- nariz -->
-        <path d="M62 85 Q70 79 78 85 Q74 91 70 92 Q66 91 62 85Z" fill="#c04840"/>
-        <ellipse cx="67" cy="84" rx="3" ry="2" fill="white" opacity="0.4"/>
-        <!-- boca -->
-        <path d="M63 96 Q70 104 77 96" stroke="#c04840" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <!-- mejillas -->
-        <circle cx="41" cy="88" r="11" fill="#f4a7c0" opacity="0.52"/>
-        <circle cx="99" cy="88" r="11" fill="#9ac4e8" opacity="0.52"/>
-        <!-- moño -->
-        <path d="M56 18 Q70 10 84 18 Q70 27 56 18Z" fill="#f4a7c0" opacity="0.92"/>
-        <path d="M56 18 Q70 27 84 18 Q70 10 56 18Z" fill="#f9c0d4" opacity="0.55"/>
-        <circle cx="70" cy="18" r="5.5" fill="#e87aa0"/>
-      </svg>
-      <span class="bear-q right">?</span>
+      <img src="assets/img/ositos.png" alt="Ositos revelación" style="width:260px;max-width:100%;display:block;margin:0 auto;">
     </div>
 
     <h2 class="splash-title">Alex & Genesis<br>te invitan</h2>
