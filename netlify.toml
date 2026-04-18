@@ -1,9 +1,15 @@
 [build]
-  publish = "."
+  publish = "invitacion"
+  functions = "invitacion/netlify/functions"
 
 [[redirects]]
-  from = "/"
-  to = "/index.html"
+  from = "/api/votes"
+  to = "/.netlify/functions/votes"
+  status = 200
+
+[[redirects]]
+  from = "/api/vote"
+  to = "/.netlify/functions/vote"
   status = 200
 
 [[headers]]
