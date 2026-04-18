@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Revelación de Género · Alex & Genesis</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --rosa: #f4a7c0;
@@ -85,8 +85,8 @@
     margin-bottom: 12px;
   }
   .splash-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.35rem, 5vw, 1.75rem);
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2rem, 7vw, 2.6rem);
     background: linear-gradient(135deg, #d4698a, #7a9fd4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -94,6 +94,7 @@
     text-align: center;
     line-height: 1.3;
     margin-bottom: 6px;
+    letter-spacing: 0.5px;
   }
   .splash-sub {
     font-size: 0.78rem;
@@ -316,21 +317,21 @@
     pointer-events: none;
   }
 
-  /* FILA ARCOIRIS + FOTO BB */
+  /* FILA OSITOS + FOTO BB */
   .crown-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 14px;
+    justify-content: space-between;
     margin-top: -30px;
     margin-bottom: 2px;
     position: relative;
     z-index: 2;
+    width: 100%;
   }
 
   .bear-half {
-    width: 95px;
-    height: 142px;
+    width: clamp(62px, 22vw, 95px);
+    height: clamp(93px, 33vw, 142px);
     background-image: url('assets/img/ositos.png');
     background-repeat: no-repeat;
     background-size: auto 100%;
@@ -355,13 +356,15 @@
 
   /* FOTO BB */
   .bb-photo-wrap {
-    width: 130px;
-    height: 120px;
+    width: clamp(88px, 28vw, 120px);
+    height: clamp(88px, 28vw, 120px);
+    min-width: clamp(88px, 28vw, 120px);
+    min-height: clamp(88px, 28vw, 120px);
     border-radius: 50%;
     padding: 4px;
     background: linear-gradient(135deg, var(--rosa), var(--azul), var(--lavanda));
     box-shadow: 0 6px 24px rgba(200, 150, 200, 0.3);
-    margin: 0 auto 22px;
+    flex-shrink: 0;
     animation: fadeUp 1s ease both 0.2s;
     opacity: 0;
     animation-fill-mode: forwards;
@@ -371,6 +374,7 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+    object-position: center;
     border: 3px solid white;
     display: block;
   }
@@ -400,22 +404,23 @@
   }
 
   h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.6rem, 9vw, 3.8rem);
     background: linear-gradient(135deg, #d4698a, #7a9fd4, #9a7ac4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    line-height: 1.2;
-    margin-bottom: 8px;
+    line-height: 1.25;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
   }
 
   .parents {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-style: italic;
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(1.5rem, 5vw, 1.9rem);
     color: var(--texto-suave);
     margin-bottom: 28px;
+    letter-spacing: 0.5px;
   }
 
   .divider {
@@ -441,9 +446,11 @@
     background: var(--crema);
     border-radius: 16px;
     padding: 12px 20px;
-    font-size: 0.95rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--texto);
+    letter-spacing: 0.3px;
   }
 
   .info-row .info-icon { font-size: 1.2rem; flex-shrink: 0; }
@@ -461,11 +468,14 @@
   a.map-link:hover { opacity: 0.75; }
 
   .cta {
-    font-size: 0.85rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
     color: var(--texto-suave);
-    line-height: 1.6;
+    line-height: 1.75;
     margin-bottom: 28px;
     padding: 0 10px;
+    letter-spacing: 0.2px;
   }
 
   /* FOTO MAMÁ */
@@ -505,11 +515,11 @@
   }
 
   .mama-name {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 1rem;
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.7rem;
     color: var(--texto-suave);
     margin-top: 10px;
+    letter-spacing: 0.5px;
   }
 
   /* FRASES BÍBLICAS */
@@ -658,6 +668,10 @@
     56%       { transform: scale(1); }
   }
 
+  @media (max-width: 390px) {
+    .card { padding: 48px 22px 44px; }
+  }
+
   /* ── BOTON MUSICA ── */
   .music-btn {
     position: fixed;
@@ -765,7 +779,7 @@
 
     <div class="info-row">
       <span class="info-icon">⏰</span>
-      <span>3:00 pm</span>
+      <span>5:00 pm</span>
     </div>
 
     <div class="info-row">
