@@ -1027,6 +1027,18 @@
     document.getElementById('revealOverlay').className = 'reveal-overlay';
   }
 
+  // Actualizar votos cada 10 segundos
+  setInterval(function () {
+    fetch(API_URL + '/votes')
+      .then(r => r.json())
+      .then(data => {
+        if (document.getElementById('voteResults').classList.contains('show')) {
+          renderVotes(data);
+        }
+      })
+      .catch(() => {});
+  }, 10000);
+
   // Activar revelación vía URL: ?revelar=varon  o  ?revelar=mujer
   const _rv = new URLSearchParams(location.search).get('revelar');
   if (_rv === 'varon' || _rv === 'mujer') setTimeout(() => mostrarRevelacion(_rv), 600);
