@@ -328,25 +328,29 @@
     z-index: 2;
   }
 
-  .crown {
-    font-size: 2.2rem;
-    animation: bounce 2s ease infinite;
+  .bear-half {
+    width: 72px;
+    height: 108px;
+    background-image: url('assets/img/ositos.png');
+    background-repeat: no-repeat;
+    background-size: auto 100%;
     flex-shrink: 0;
   }
-  .crown-flip {
-    transform: scaleX(-1);
-    display: inline-block;
+  .bear-left  {
+    background-position: left center;
+    animation: bounce 2s ease infinite;
+  }
+  .bear-right {
+    background-position: right center;
+    animation: bounceFlip 2s ease infinite 0.3s;
   }
   @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50%       { transform: translateY(-10px); }
   }
-  .crown-flip {
-    animation: bounceFlip 2s ease infinite 0.3s;
-  }
   @keyframes bounceFlip {
-    0%, 100% { transform: scaleX(-1) translateY(0); }
-    50%       { transform: scaleX(-1) translateY(-10px); }
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-10px); }
   }
 
   /* FOTO BB */
@@ -727,11 +731,11 @@
   </div>
 
   <div class="crown-row">
-    <span class="crown">🌈</span>
+    <div class="bear-half bear-left"></div>
     <div class="bb-photo-wrap">
       <img src="assets/img/bb.jpg" alt="Foto del bebé" class="bb-photo">
     </div>
-    <span class="crown crown-flip">🌈</span>
+    <div class="bear-half bear-right"></div>
   </div>
 
   <div class="tag">¡Estás invitado!</div>
