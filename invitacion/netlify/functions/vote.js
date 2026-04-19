@@ -22,19 +22,22 @@ exports.handler = async function (event) {
   }
 
   try {
-    await fetch(`${url}/incr/${gender}`, { headers: { Authorization: `Bearer ${token}` } });
+    const otherKey = gender === 'varon' ? 'mujer' : 'varon';
 
-    const [r1, r2] = await Promise.all([
-      fetch(`${url}/get/varon`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-      fetch(`${url}/get/mujer`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+    const [incrRes, otherRes] = await Promise.all([
+      fetch(`${url}/incr/${gender}`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${url}/get/${otherKey}`,  { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
     ]);
+
+    const votado = parseInt(incrRes.result) || 0;
+    const otro   = parseInt(otherRes.result) || 0;
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        varon: parseInt(r1.result) || 0,
-        mujer: parseInt(r2.result) || 0,
+        varon: gender === 'varon' ? votado : otro,
+        mujer: gender === 'mujer' ? votado : otro,
       }),
     };
   } catch (err) {
