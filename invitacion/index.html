@@ -853,7 +853,7 @@
   // ── VOTACION ──
   const API_URL = '/api';
 
-  const yaVoto = localStorage.getItem('bb_voto');
+  const yaVoto = localStorage.getItem('bb_voto_v2');
 
   function renderVotes(data) {
     const total = data.varon + data.mujer || 1;
@@ -881,7 +881,7 @@
       .then(data => {
         if (data.varon + data.mujer === 0) {
           // El servidor se reseteo (redeploy) — permitir votar de nuevo
-          localStorage.removeItem('bb_voto');
+          localStorage.removeItem('bb_voto_v2');
         } else {
           renderVotes(data);
           bloquearBotones(yaVoto);
@@ -904,7 +904,7 @@
     .then(r => r.json())
     .then(data => {
       if (data.error) throw new Error(data.error);
-      localStorage.setItem('bb_voto', gender);
+      localStorage.setItem('bb_voto_v2', gender);
       renderVotes(data);
       bloquearBotones(gender);
       lanzarConfetti(gender);
