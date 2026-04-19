@@ -903,15 +903,16 @@
     })
     .then(r => r.json())
     .then(data => {
+      if (data.error) throw new Error(data.error);
       localStorage.setItem('bb_voto', gender);
       renderVotes(data);
       bloquearBotones(gender);
       lanzarConfetti(gender);
     })
-    .catch(() => {
+    .catch(err => {
       btnV.disabled = false;
       btnM.disabled = false;
-      document.getElementById('voteMsg').textContent = 'Error al conectar. Intenta de nuevo.';
+      document.getElementById('voteMsg').textContent = '⚠️ ' + (err.message || 'Error al conectar');
     });
   }
 
