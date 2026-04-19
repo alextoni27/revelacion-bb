@@ -21,16 +21,31 @@ exports.handler = async function (event) {
     return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Variables de entorno no configuradas' }) };
   }
 
+  const authHeader = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+  const otherKey = gender === 'varon' ? 'mujer' : 'varon';
+
   try {
-    const otherKey = gender === 'varon' ? 'mujer' : 'varon';
+    // Use pipeline for atomic INCR + GET
+    let pipeRes = await fetch(`${url}/pipeline`, {
+      method: 'POST',
+      headers: authHeader,
+      body: JSON.stringify([['INCR', gender], ['GET', otherKey]]),
+    }).then(r => r.json());
 
-    const [incrRes, otherRes] = await Promise.all([
-      fetch(`${url}/incr/${gender}`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-      fetch(`${url}/get/${otherKey}`,  { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-    ]);
+    let votado = parseInt(pipeRes[0]?.result);
 
-    const votado = parseInt(incrRes.result) || 0;
-    const otro   = parseInt(otherRes.result) || 0;
+    // If INCR failed (wrong key type), delete key and retry
+    if (isNaN(votado)) {
+      await fetch(`${url}/del/${gender}`, { headers: { Authorization: `Bearer ${token}` } });
+      pipeRes = await fetch(`${url}/pipeline`, {
+        method: 'POST',
+        headers: authHeader,
+        body: JSON.stringify([['INCR', gender], ['GET', otherKey]]),
+      }).then(r => r.json());
+      votado = parseInt(pipeRes[0]?.result) || 0;
+    }
+
+    const otro = parseInt(pipeRes[1]?.result) || 0;
 
     return {
       statusCode: 200,
