@@ -9,16 +9,28 @@
   :root {
     --rosa: #f4a7c0;
     --azul: #9ac4e8;
+    --turquesa: #40c4b8;
+    --coral: #ff8c7a;
+    --ocean: #48cae4;
+    --arena: #f5e6c0;
     --lavanda: #c9b8e8;
-    --crema: #fdf6ef;
-    --texto: #5a4a5a;
-    --texto-suave: #9a8a9a;
+    --crema: #fef5e4;
+    --texto: #4a3f4a;
+    --texto-suave: #8a7a8a;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: linear-gradient(135deg, #fdf0f8 0%, #f0f4fd 50%, #f0fdf8 100%);
+    background: linear-gradient(180deg,
+      #b8dff5 0%,
+      #6ec4e8 22%,
+      #3ab0d8 42%,
+      #c8a85e 66%,
+      #eed8a0 80%,
+      #faecd4 100%
+    );
+    background-attachment: fixed;
     font-family: 'Nunito', sans-serif;
     color: var(--texto);
     min-height: 100vh;
@@ -34,7 +46,7 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: linear-gradient(135deg, #fce4f0 0%, #e8eeff 50%, #e4faf0 100%);
+    background: linear-gradient(180deg, #b8dff5 0%, #6ec4e8 32%, #3ab0d8 55%, #ecd8a0 80%, #faecd4 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,8 +66,8 @@
     max-width: 320px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 24px 80px rgba(200,150,200,0.3), 0 4px 20px rgba(154,196,232,0.2);
-    border: 2px solid rgba(244,167,192,0.25);
+    box-shadow: 0 24px 80px rgba(58,176,216,0.3), 0 4px 20px rgba(72,202,228,0.25);
+    border: 2px solid rgba(72,202,228,0.3);
     position: relative;
     animation: cardFloat 3.5s ease-in-out infinite;
   }
@@ -303,7 +315,7 @@
     position: absolute;
     top: -50px; right: -50px;
     width: 180px; height: 180px;
-    background: radial-gradient(circle, rgba(244,167,192,0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(72,202,228,0.15) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -312,7 +324,7 @@
     position: absolute;
     bottom: -40px; left: -40px;
     width: 150px; height: 150px;
-    background: radial-gradient(circle, rgba(154,196,232,0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(245,224,160,0.22) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -672,6 +684,37 @@
     .card { padding: 48px 22px 44px; }
   }
 
+  /* ── OLAS DEL MAR ── */
+  .wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    pointer-events: none;
+    z-index: 45;
+    overflow: hidden;
+  }
+  .wave-svg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    animation: waveDrift 8s linear infinite;
+  }
+  .wave-svg2 {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 200%;
+    animation: waveDrift 13s linear infinite reverse;
+    opacity: 0.6;
+  }
+  @keyframes waveDrift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
   /* ── BOTON MUSICA ── */
   .music-btn {
     position: fixed;
@@ -726,7 +769,7 @@
     </div>
 
     <h2 class="splash-title">Alex & Genesis<br>te invitan</h2>
-    <p class="splash-sub">¡Toca para descubrir! 🌈</p>
+    <p class="splash-sub">¡Toca para descubrir! 🌊</p>
     <button class="splash-btn">Abrir invitación 🎀</button>
     <div class="splash-hearts">💙 · 💗</div>
   </div>
@@ -768,24 +811,24 @@
   <h1>Revelación<br><em>de Género</em></h1>
   <p class="parents">Alex & Genesis</p>
 
-  <div class="divider">🌸 · 🍭 · 🌸</div>
+  <div class="divider">🌊 · 🐚 · 🌊</div>
 
   <div class="info-block">
 
     <div class="info-row">
       <span class="info-icon">📅</span>
-      <span>Sabado 30 de mayo, 2026</span>
+      <span>Sabado 16 de mayo, 2026</span>
     </div>
 
     <div class="info-row">
       <span class="info-icon">⏰</span>
-      <span>5:00 pm</span>
+      <span>1:00 pm</span>
     </div>
 
     <div class="info-row">
-      <a href="https://www.google.com/maps?q=-11.124840119189644,-77.59608098387449" target="_blank" rel="noopener" class="map-link">
+      <a href="https://www.google.com/maps?q=-11.159428,-77.598237" target="_blank" rel="noopener" class="map-link">
         <span class="info-icon">📍</span>
-        <span>Parque las Gardenias<br>Huacho 15136<br><small style="font-size:0.72rem;opacity:0.65;font-weight:600;letter-spacing:0.5px;">📌 Toca para ver en el mapa</small></span>
+        <span>Playa Cabeza de León<br>Huacho 15136<br><small style="font-size:0.72rem;opacity:0.65;font-weight:600;letter-spacing:0.5px;">📌 Toca para ver en el mapa</small></span>
       </a>
     </div>
 
@@ -816,7 +859,7 @@
     <strong>¿niño o niña?</strong> · ¡Pronto lo sabremos todos! 🎊
   </p>
 
-  <div class="divider">· · ·</div>
+  <div class="divider">🌊 · · · 🌊</div>
 
   <!-- FOTO MAMÁ -->
   <div class="mama-section">
@@ -827,7 +870,7 @@
     <p class="mama-name">Genesis</p>
   </div>
 
-  <div class="divider">✦ · ✦ · ✦</div>
+  <div class="divider">🌴 · ✦ · 🌴</div>
 
   <!-- FRASES BÍBLICAS -->
   <div class="biblia-block">
@@ -954,7 +997,7 @@
   // ── GLOBOS ──
   (function () {
     const layer = document.getElementById('balloonsLayer');
-    const COLORS = ['#f4a7c0', '#9ac4e8', '#f9c0d4', '#b8d8f0', '#e8b4cc', '#a8cce8'];
+    const COLORS = ['#48cae4', '#90e0ef', '#f4a7c0', '#ffb347', '#ff8c7a', '#7ecbca', '#b8e0f0', '#fce4b8'];
     const COUNT = 18;
 
     function makeBalloon() {
@@ -1069,6 +1112,18 @@
   const _rv = new URLSearchParams(location.search).get('revelar');
   if (_rv === 'varon' || _rv === 'mujer') setTimeout(() => mostrarRevelacion(_rv), 600);
 </script>
+
+<!-- OLAS DEL MAR -->
+<div class="wave-container">
+  <svg class="wave-svg" viewBox="0 0 1440 72" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,36 C240,72 480,0 720,36 C960,72 1200,0 1440,36 L1440,72 L0,72 Z" fill="rgba(58,176,216,0.55)"/>
+    <path d="M0,36 C240,72 480,0 720,36 C960,72 1200,0 1440,36 L1440,72 L0,72 Z" fill="rgba(58,176,216,0.55)" transform="translate(720,0)"/>
+  </svg>
+  <svg class="wave-svg2" viewBox="0 0 1440 72" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,44 C200,14 420,64 620,44 C820,20 1040,66 1220,44 C1310,30 1390,60 1440,44 L1440,72 L0,72 Z" fill="rgba(144,224,239,0.5)"/>
+    <path d="M0,44 C200,14 420,64 620,44 C820,20 1040,66 1220,44 C1310,30 1390,60 1440,44 L1440,72 L0,72 Z" fill="rgba(144,224,239,0.5)" transform="translate(720,0)"/>
+  </svg>
+</div>
 
 </body>
 </html>
